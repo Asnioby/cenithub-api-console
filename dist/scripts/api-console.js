@@ -841,10 +841,42 @@
           }
         };
 
+        $scope.getQueryParam = function(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                results = regex.exec(document.location.search);
+            return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+          };
+        <!--
         if (document.location.search.indexOf('?raml=') !== -1) {
           $scope.ramlUrl = document.location.search.replace('?raml=', '');
           $scope.loadFromUrl();
         }
+        -->
+
+          var baseURL = 'https://www.cenithub.com/api/v1/public/raml/';
+          var id = $scope.getQueryParam('id');
+          var raml = $scope.getQueryParam('raml');
+          var path = $scope.getQueryParam('path');
+
+          if (raml) {
+              $scope.ramlUrl = raml
+              document.location.search.replace('?raml=', '');
+              $scope.loadFromUrl();
+          }
+
+          if (id) {
+              $scope.ramlUrl = baseURL + id + '/ROOT';
+              document.location.search.replace('?', '');
+              $scope.loadFromUrl();
+          }
+
+          if (path) {
+              $scope.ramlUrl = baseURL + path;
+              document.location.search.replace('?', '');
+              $scope.loadFromUrl();
+          }
+
       }]
     };
   };
